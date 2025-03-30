@@ -56,7 +56,7 @@ class NavigationGraph:
             # Check for both directions
             if lane[0] == vertex_index:
                 connected.append(lane[1])
-            #Uncomment if bidirectional movement is allowed
+
             if lane[1] == vertex_index:
                 connected.append(lane[0])
         

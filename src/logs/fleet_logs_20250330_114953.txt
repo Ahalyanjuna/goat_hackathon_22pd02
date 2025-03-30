@@ -1,0 +1,6 @@
+2025-03-30 11:49:53,590 - fleet_management - INFO - Logging initialized
+2025-03-30 11:49:53,590 - fleet_management - INFO - Fleet Management System starting up
+2025-03-30 11:49:53,590 - fleet_management - INFO - Loading navigation graph from D:\full stack\goat\data\nav_graph_2.json
+2025-03-30 11:49:53,590 - fleet_management - INFO - Loaded 14 vertices and 30 lanes
+2025-03-30 11:49:53,767 - fleet_management - INFO - Starting GUI
+2025-03-30 11:49:56,920 - fleet_management - INFO - Shutting down Fleet Management System

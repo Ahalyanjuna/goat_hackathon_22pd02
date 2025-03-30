@@ -1,0 +1,190 @@
+2025-03-30 12:31:14,282 - fleet_management - INFO - Logging initialized
+2025-03-30 12:31:14,287 - fleet_management - INFO - Fleet Management System starting up
+2025-03-30 12:31:14,287 - fleet_management - INFO - Loading navigation graph from D:\full stack\goat\data\nav_graph_2.json
+2025-03-30 12:31:14,287 - fleet_management - INFO - Loaded 14 vertices and 30 lanes
+2025-03-30 12:31:14,480 - fleet_management - INFO - Starting GUI
+2025-03-30 12:31:15,704 - fleet_management - INFO - Spawned Robot 0 at vertex 1 (V1)
+2025-03-30 12:31:15,726 - fleet_management - INFO - Vertex 1 occupied by Robot 0
+2025-03-30 12:31:17,967 - fleet_management - INFO - Selected Robot 0
+2025-03-30 12:31:19,028 - fleet_management - INFO - Assigned Robot 0 to navigate to vertex 11 (V11)
+2025-03-30 12:31:19,053 - fleet_management - INFO - Lane from 1 to 0 reserved by Robot 0
+2025-03-30 12:31:19,056 - fleet_management - INFO - Path calculated: [0, 13, 12, 11]
+2025-03-30 12:31:21,067 - fleet_management - INFO - Vertex 1 released by Robot 0
+2025-03-30 12:31:21,067 - fleet_management - INFO - Lane from 1 to 0 released by Robot 0
+2025-03-30 12:31:21,069 - fleet_management - INFO - Vertex 0 occupied by Robot 0
+2025-03-30 12:31:21,104 - fleet_management - INFO - Lane from 0 to 13 reserved by Robot 0
+2025-03-30 12:31:21,709 - fleet_management - INFO - Spawned Robot 1 at vertex 7 (V7)
+2025-03-30 12:31:21,732 - fleet_management - INFO - Vertex 7 occupied by Robot 1
+2025-03-30 12:31:23,121 - fleet_management - INFO - Vertex 0 released by Robot 0
+2025-03-30 12:31:23,121 - fleet_management - INFO - Lane from 0 to 13 released by Robot 0
+2025-03-30 12:31:23,121 - fleet_management - INFO - Vertex 13 occupied by Robot 0
+2025-03-30 12:31:23,156 - fleet_management - INFO - Lane from 13 to 12 reserved by Robot 0
+2025-03-30 12:31:24,577 - fleet_management - INFO - Selected Robot 1
+2025-03-30 12:31:25,163 - fleet_management - INFO - Vertex 13 released by Robot 0
+2025-03-30 12:31:25,163 - fleet_management - INFO - Lane from 13 to 12 released by Robot 0
+2025-03-30 12:31:25,163 - fleet_management - INFO - Vertex 12 occupied by Robot 0
+2025-03-30 12:31:25,200 - fleet_management - INFO - Lane from 12 to 11 reserved by Robot 0
+2025-03-30 12:31:25,700 - fleet_management - INFO - Assigned Robot 1 to navigate to vertex 8 (V8)
+2025-03-30 12:31:25,704 - fleet_management - INFO - Path calculated: [1, 8]
+2025-03-30 12:31:25,733 - fleet_management - INFO - Lane from 7 to 1 reserved by Robot 1
+2025-03-30 12:31:27,212 - fleet_management - INFO - Vertex 12 released by Robot 0
+2025-03-30 12:31:27,213 - fleet_management - INFO - Lane from 12 to 11 released by Robot 0
+2025-03-30 12:31:27,213 - fleet_management - INFO - Vertex 11 occupied by Robot 0
+2025-03-30 12:31:27,742 - fleet_management - INFO - Vertex 7 released by Robot 1
+2025-03-30 12:31:27,742 - fleet_management - INFO - Lane from 7 to 1 released by Robot 1
+2025-03-30 12:31:27,742 - fleet_management - INFO - Vertex 1 occupied by Robot 1
+2025-03-30 12:31:27,778 - fleet_management - INFO - Lane from 1 to 8 reserved by Robot 1
+2025-03-30 12:31:29,779 - fleet_management - INFO - Vertex 1 released by Robot 1
+2025-03-30 12:31:29,783 - fleet_management - INFO - Lane from 1 to 8 released by Robot 1
+2025-03-30 12:31:29,787 - fleet_management - INFO - Vertex 8 occupied by Robot 1
+2025-03-30 12:31:32,099 - fleet_management - INFO - Selected Robot 0
+2025-03-30 12:31:35,389 - fleet_management - INFO - Assigned Robot 0 to navigate to vertex 1 (V1)
+2025-03-30 12:31:35,402 - fleet_management - INFO - Lane from 11 to 10 reserved by Robot 0
+2025-03-30 12:31:35,404 - fleet_management - INFO - Path calculated: [10, 9, 8, 1]
+2025-03-30 12:31:37,208 - fleet_management - INFO - Selected Robot 1
+2025-03-30 12:31:37,434 - fleet_management - INFO - Vertex 11 released by Robot 0
+2025-03-30 12:31:37,434 - fleet_management - INFO - Lane from 11 to 10 released by Robot 0
+2025-03-30 12:31:37,436 - fleet_management - INFO - Vertex 10 occupied by Robot 0
+2025-03-30 12:31:37,471 - fleet_management - INFO - Lane from 10 to 9 reserved by Robot 0
+2025-03-30 12:31:38,126 - fleet_management - INFO - Assigned Robot 1 to navigate to vertex 11 (V11)
+2025-03-30 12:31:38,129 - fleet_management - INFO - Path calculated: [9, 10, 11]
+2025-03-30 12:31:38,189 - fleet_management - INFO - Lane from 8 to 9 reserved by Robot 1
+2025-03-30 12:31:39,478 - fleet_management - INFO - Vertex 10 released by Robot 0
+2025-03-30 12:31:39,478 - fleet_management - INFO - Lane from 10 to 9 released by Robot 0
+2025-03-30 12:31:39,478 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,221 - fleet_management - INFO - Vertex 8 released by Robot 1
+2025-03-30 12:31:40,221 - fleet_management - INFO - Lane from 8 to 9 released by Robot 1
+2025-03-30 12:31:40,221 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,255 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,255 - fleet_management - INFO - Lane from 9 to 8 reserved by Robot 0
+2025-03-30 12:31:40,257 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,258 - fleet_management - INFO - Lane from 9 to 10 reserved by Robot 1
+2025-03-30 12:31:40,291 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,291 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,326 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,326 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,361 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,361 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,396 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,396 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,430 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,430 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,464 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,464 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,499 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,499 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,534 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,534 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,569 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,569 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,603 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,603 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,638 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,638 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,671 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,672 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,707 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,708 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,742 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,742 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,778 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,778 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,814 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,814 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,849 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,849 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,883 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,883 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,917 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,917 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:40,953 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:40,953 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,006 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,035 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,040 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,042 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,074 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,076 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,108 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,108 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,143 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,143 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,177 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,177 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,213 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,214 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,247 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,247 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,281 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,281 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,315 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,315 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,350 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,350 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,385 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,385 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,419 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,419 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,455 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,455 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,489 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,490 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,523 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,523 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,560 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,561 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,595 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,596 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,629 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,629 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,663 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,664 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,699 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,699 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,733 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,734 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,767 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,767 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,802 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,802 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,838 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,838 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,873 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,873 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,908 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,909 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,942 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,943 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:41,978 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:41,979 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:42,014 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:42,016 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:42,048 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:42,048 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:42,083 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:42,083 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:42,119 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:42,119 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:42,154 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:42,154 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:42,189 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:42,189 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:42,222 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:42,222 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:42,257 - fleet_management - INFO - Vertex 9 occupied by Robot 0
+2025-03-30 12:31:42,257 - fleet_management - INFO - Vertex 9 released by Robot 0
+2025-03-30 12:31:42,257 - fleet_management - INFO - Lane from 9 to 8 released by Robot 0
+2025-03-30 12:31:42,257 - fleet_management - INFO - Vertex 8 occupied by Robot 0
+2025-03-30 12:31:42,257 - fleet_management - INFO - Vertex 9 occupied by Robot 1
+2025-03-30 12:31:42,257 - fleet_management - INFO - Vertex 9 released by Robot 1
+2025-03-30 12:31:42,257 - fleet_management - INFO - Lane from 9 to 10 released by Robot 1
+2025-03-30 12:31:42,261 - fleet_management - INFO - Vertex 10 occupied by Robot 1
+2025-03-30 12:31:42,292 - fleet_management - INFO - Lane from 8 to 1 reserved by Robot 0
+2025-03-30 12:31:42,293 - fleet_management - INFO - Lane from 10 to 11 reserved by Robot 1
+2025-03-30 12:31:44,306 - fleet_management - INFO - Vertex 8 released by Robot 0
+2025-03-30 12:31:44,306 - fleet_management - INFO - Lane from 8 to 1 released by Robot 0
+2025-03-30 12:31:44,306 - fleet_management - INFO - Vertex 1 occupied by Robot 0
+2025-03-30 12:31:44,308 - fleet_management - INFO - Vertex 10 released by Robot 1
+2025-03-30 12:31:44,309 - fleet_management - INFO - Lane from 10 to 11 released by Robot 1
+2025-03-30 12:31:44,309 - fleet_management - INFO - Vertex 11 occupied by Robot 1
+2025-03-30 12:31:46,166 - fleet_management - INFO - Shutting down Fleet Management System

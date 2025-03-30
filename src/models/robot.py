@@ -110,26 +110,6 @@ class Robot:
         # No path found
         self.log(f"No path found from {self.current_vertex} to {self.destination_vertex} (avoiding {len(avoid_lanes)} lanes)")
         self.path = []
-         
-    
-    def find_alternative_path(self, traffic_manager):
-        """Instead of finding an alternative path, just wait at current vertex until lane is free"""
-        # Mark the lane as blocked for tracking purposes
-        if self.path:
-            next_vertex = self.path[0]
-            current_blocked_lane = (self.current_vertex, next_vertex)
-            
-            if current_blocked_lane:
-                self.blocked_lanes.add(current_blocked_lane)
-        
-        # Set status to waiting (don't try to find alternative paths)
-        self.status = self.STATUS_WAITING
-        self.log(f"Robot {self.id} waiting at {self.nav_graph.get_vertex_name(self.current_vertex)} until lane becomes free")
-        
-        # Reset path recalculation attempts (not used anymore but keeping for compatibility)
-        self.path_recalculation_attempts = 0
-        
-        return False  # Always return False to indicate no alternative path is being sought
     
     def start_move_to_next_vertex(self, traffic_manager):
         #Attempt to start moving to the next vertex in the path
