@@ -54,14 +54,15 @@ class FleetGUI:
         self.status_frame = ttk.Frame(self.side_panel)
         self.status_frame.pack(fill=tk.X, padx=5, pady=5)
         
-        # Create status indicators
+        # Create status indicators with all robot statuses
         self.status_labels = {}
         statuses = [
             ("idle", "Idle"),
             ("moving", "Moving"),
             ("waiting", "Waiting"),
             ("charging", "Charging"),
-            ("task_complete", "Complete")
+            ("task_complete", "Complete"),
+            ("blocked", "Blocked")  # Added the blocked status
         ]
         
         for status_key, status_text in statuses:
@@ -78,7 +79,8 @@ class FleetGUI:
         instructions = [
             "• Click on a vertex to spawn a robot",
             "• Click on a robot, then a vertex to assign task",
-            "• Golden vertices are charging stations"
+            "• Golden vertices are charging stations",
+            "• Orange indicators show waiting robots"
         ]
         
         for instruction in instructions:
@@ -90,8 +92,12 @@ class FleetGUI:
         self.selection_info = ttk.Label(self.side_panel, text="None selected", wraplength=180)
         self.selection_info.pack(padx=5, pady=5)
         
-        # Clear selection button
-        ttk.Button(self.side_panel, text="Clear Selection", command=self.clear_selection).pack(pady=5)
+        # Control buttons
+        self.control_frame = ttk.Frame(self.side_panel)
+        self.control_frame.pack(fill=tk.X, padx=5, pady=5)
+        
+        ttk.Button(self.control_frame, text="Clear Selection", command=self.clear_selection).pack(side=tk.LEFT, padx=5)
+        ttk.Button(self.control_frame, text="Charge Robot", command=self.charge_selected_robot).pack(side=tk.RIGHT, padx=5)
         
         # Initialize selection state
         self.selected_robot = None
@@ -109,9 +115,8 @@ class FleetGUI:
         self.update_thread.daemon = True
         self.update_thread.start()
     
-    
     def calculate_scaling_factors(self):
-        #Calculate scaling factors to position the nav_graph on the canvas
+        """Calculate scaling factors to position the nav_graph on the canvas"""
         # Get min and max coordinates to understand the graph dimensions
         min_x, min_y = float('inf'), float('inf')
         max_x, max_y = float('-inf'), float('-inf')
@@ -176,101 +181,15 @@ class FleetGUI:
         print(f"Centering offsets: ({self.offset_x}, {self.offset_y})")
 
     def world_to_canvas(self, world_x, world_y):
-        #Convert world coordinates to canvas coordinates
+        """Convert world coordinates to canvas coordinates"""
         canvas_x = world_x * self.scale_x + self.offset_x
         canvas_y = world_y * self.scale_y + self.offset_y
         return canvas_x, canvas_y
-        
-    """def draw_nav_graph(self):
-        #Draw the navigation graph on the canvas
-        # Clear canvas
-        self.canvas.delete("all")
-        
-        print("Drawing navigation graph...")
-        
-        # Draw lanes
-        for lane in self.nav_graph.lanes:
-            from_vertex, to_vertex = lane[0], lane[1]
-            
-            from_coords = self.nav_graph.get_vertex_coords(from_vertex)
-            to_coords = self.nav_graph.get_vertex_coords(to_vertex)
-            
-            if not from_coords or not to_coords:
-                print(f"Missing coordinates for lane {from_vertex} -> {to_vertex}")
-                continue
-                
-            from_x, from_y = self.world_to_canvas(*from_coords)
-            to_x, to_y = self.world_to_canvas(*to_coords)
-            
-            print(f"Lane from ({from_x}, {from_y}) to ({to_x}, {to_y})")
-            
-            # Check if lane is occupied
-            lane_color = self.LANE_COLOR
-            if self.traffic_manager.is_lane_occupied(from_vertex, to_vertex):
-                lane_color = "#FF6666"  # Light red for occupied lanes
-                
-                # Draw direction arrow
-                self.draw_arrow(from_x, from_y, to_x, to_y, lane_color)
-            else:
-                # Draw normal lane
-                self.canvas.create_line(from_x, from_y, to_x, to_y, fill=lane_color, width=2)
-        
-        # Draw vertices
-        for vertex_index in self.nav_graph.vertex_map:
-            coords = self.nav_graph.get_vertex_coords(vertex_index)
-            if not coords:
-                print(f"Missing coordinates for vertex {vertex_index}")
-                continue
-                
-            canvas_x, canvas_y = self.world_to_canvas(*coords)
-            
-            # Determine color based on whether it's a charger
-            vertex_color = self.CHARGER_COLOR if self.nav_graph.is_charger(vertex_index) else self.VERTEX_COLOR
-            
-            # Check if vertex has a robot
-            robot = self.fleet_manager.get_robot_at_vertex(vertex_index)
-            outline_color = "black"
-            outline_width = 1
-            
-            if robot and robot.id == self.selected_robot:
-                outline_color = self.SELECTION_COLOR
-                outline_width = 3
-            
-            # Draw the vertex
-            self.canvas.create_oval(
-                canvas_x - self.VERTEX_RADIUS, canvas_y - self.VERTEX_RADIUS,
-                canvas_x + self.VERTEX_RADIUS, canvas_y + self.VERTEX_RADIUS,
-                fill=vertex_color, outline=outline_color, width=outline_width, tags=f"vertex_{vertex_index}"
-            )
-            
-            # Add vertex name
-            vertex_name = self.nav_graph.get_vertex_name(vertex_index)
-            if vertex_name:
-                self.canvas.create_text(canvas_x, canvas_y, text=vertex_name, font=("Arial", 8))
-    
-    def draw_arrow(self, from_x, from_y, to_x, to_y, color):
-        #Draw an arrow to indicate lane direction and occupancy
-        # Calculate direction vector
-        dx = to_x - from_x
-        dy = to_y - from_y
-        length = math.sqrt(dx*dx + dy*dy)
-        
-        if length < 1e-6:
-            return
-        
-        # Normalize
-        dx /= length
-        dy /= length
-        
-        # Draw the line
-        self.canvas.create_line(from_x, from_y, to_x, to_y, fill=color, width=2, arrow=tk.LAST)"""
     
     def draw_nav_graph(self):
         """Draw the navigation graph on the canvas"""
         # Clear canvas
         self.canvas.delete("all")
-        
-        #print("Drawing navigation graph...")
         
         # Draw lanes
         for lane in self.nav_graph.lanes:
@@ -326,7 +245,7 @@ class FleetGUI:
                 # Free lane - normal line
                 self.canvas.create_line(from_x, from_y, to_x, to_y, fill=lane_color, width=lane_width)
         
-        # Draw vertices (rest of method unchanged)
+        # Draw vertices
         for vertex_index in self.nav_graph.vertex_map:
             coords = self.nav_graph.get_vertex_coords(vertex_index)
             if not coords:
@@ -338,14 +257,39 @@ class FleetGUI:
             # Determine color based on whether it's a charger
             vertex_color = self.CHARGER_COLOR if self.nav_graph.is_charger(vertex_index) else self.VERTEX_COLOR
             
-            # Check if vertex has a robot
-            robot = self.fleet_manager.get_robot_at_vertex(vertex_index)
+            # Check if vertex is occupied
             outline_color = "black"
             outline_width = 1
             
-            if robot and robot.id == self.selected_robot:
-                outline_color = self.SELECTION_COLOR
-                outline_width = 3
+            # If vertex is occupied, highlight it
+            if self.traffic_manager.is_vertex_occupied(vertex_index):
+                outline_color = "#0000FF"  # Blue outline for occupied vertices
+                outline_width = 2
+                
+                # Check if there's a queue for this vertex
+                queue_length = self.traffic_manager.get_vertex_queue_length(vertex_index)
+                if queue_length > 0:
+                    # Show queue indicator
+                    self.canvas.create_oval(
+                        canvas_x + self.VERTEX_RADIUS - 5,
+                        canvas_y - self.VERTEX_RADIUS - 15,
+                        canvas_x + self.VERTEX_RADIUS + 5,
+                        canvas_y - self.VERTEX_RADIUS - 5,
+                        fill="#FFA500"  # Orange for waiting
+                    )
+                    self.canvas.create_text(
+                        canvas_x + self.VERTEX_RADIUS, 
+                        canvas_y - self.VERTEX_RADIUS - 10, 
+                        text=str(queue_length), 
+                        font=("Arial", 7, "bold")
+                    )
+            
+            # Special highlight for selected robot's vertex
+            if self.selected_robot is not None:
+                robot = self.fleet_manager.robots.get(self.selected_robot)
+                if robot and robot.current_vertex == vertex_index:
+                    outline_color = self.SELECTION_COLOR
+                    outline_width = 3
             
             # Draw the vertex
             self.canvas.create_oval(
@@ -358,6 +302,22 @@ class FleetGUI:
             vertex_name = self.nav_graph.get_vertex_name(vertex_index)
             if vertex_name:
                 self.canvas.create_text(canvas_x, canvas_y, text=vertex_name, font=("Arial", 8))
+                
+            # Show robots waiting at this vertex
+            waiting_robots = self.traffic_manager.get_waiting_robots_at_vertex(vertex_index)
+            if waiting_robots:
+                # Draw waiting indicator below vertex
+                waiting_text = ", ".join(map(str, waiting_robots))
+                if len(waiting_text) > 10:  # If too many robots, just show count
+                    waiting_text = f"{len(waiting_robots)} robots"
+                    
+                self.canvas.create_text(
+                    canvas_x, 
+                    canvas_y + self.VERTEX_RADIUS + 10, 
+                    text=f"Waiting: {waiting_text}", 
+                    font=("Arial", 7),
+                    fill="#FF6600"
+                )
 
     def draw_arrow(self, from_x, from_y, to_x, to_y, color, width=2):
         """Draw an arrow to indicate lane direction and occupancy"""
@@ -377,7 +337,7 @@ class FleetGUI:
         self.canvas.create_line(from_x, from_y, to_x, to_y, fill=color, width=width, arrow=tk.LAST)
     
     def draw_robots(self):
-        #Draw all robots on the canvas
+        """Draw all robots on the canvas"""
         for robot_id, robot in self.fleet_manager.robots.items():
             pos = robot.get_current_position()
             if pos:
@@ -403,7 +363,8 @@ class FleetGUI:
                     robot.STATUS_MOVING: "#00FF00",    # Green
                     robot.STATUS_WAITING: "#FFA500",   # Orange
                     robot.STATUS_CHARGING: "#FFD700",  # Gold
-                    robot.STATUS_COMPLETED: "#00FFFF"  # Cyan
+                    robot.STATUS_COMPLETED: "#00FFFF", # Cyan
+                    robot.STATUS_BLOCKED: "#FF0000"    # Red for blocked status
                 }.get(robot.status, "#808080")
                 
                 self.canvas.create_rectangle(
@@ -411,9 +372,52 @@ class FleetGUI:
                     canvas_x + self.ROBOT_RADIUS, canvas_y - self.ROBOT_RADIUS - 3,
                     fill=status_color, outline="black"
                 )
+                
+                # Draw progress bar for moving or charging robots
+                if robot.status == robot.STATUS_MOVING:
+                    # Draw progress bar for movement
+                    bar_width = 2 * self.ROBOT_RADIUS * robot.progress
+                    self.canvas.create_rectangle(
+                        canvas_x - self.ROBOT_RADIUS, canvas_y + self.ROBOT_RADIUS + 3,
+                        canvas_x - self.ROBOT_RADIUS + bar_width, canvas_y + self.ROBOT_RADIUS + 6,
+                        fill="#00FF00", outline="black"
+                    )
+                elif robot.status == robot.STATUS_CHARGING:
+                    # Draw progress bar for charging
+                    bar_width = 2 * self.ROBOT_RADIUS * robot.charging_progress
+                    self.canvas.create_rectangle(
+                        canvas_x - self.ROBOT_RADIUS, canvas_y + self.ROBOT_RADIUS + 3,
+                        canvas_x - self.ROBOT_RADIUS + bar_width, canvas_y + self.ROBOT_RADIUS + 6,
+                        fill="#FFD700", outline="black"
+                    )
+                
+                # Draw waiting info for waiting robots
+                if robot.status == robot.STATUS_WAITING:
+                    # Get what the robot is waiting for (lane or vertex)
+                    waiting_info = robot.get_blocking_info(self.traffic_manager)
+                    
+                    if waiting_info:
+                        if "blocked_vertex" in waiting_info:
+                            waiting_text = f"Waiting for V{waiting_info['blocked_vertex']}"
+                        elif "blocked_lane" in waiting_info:
+                            from_v, to_v = waiting_info["blocked_lane"]
+                            waiting_text = f"Waiting for L{from_v}-{to_v}"
+                        else:
+                            waiting_text = "Waiting"
+                            
+                        if "blocking_robot" in waiting_info:
+                            waiting_text += f" (R{waiting_info['blocking_robot']})"
+                            
+                        self.canvas.create_text(
+                            canvas_x, 
+                            canvas_y + self.ROBOT_RADIUS + 12, 
+                            text=waiting_text, 
+                            font=("Arial", 7),
+                            fill="#FF6600"
+                        )
     
     def update_gui(self):
-        #Update the GUI components
+        """Update the GUI components"""
         # Redraw the nav_graph and robots
         self.draw_nav_graph()
         self.draw_robots()
@@ -429,11 +433,25 @@ class FleetGUI:
             if self.selected_robot in self.fleet_manager.robots:
                 robot = self.fleet_manager.robots[self.selected_robot]
                 status_text = f"Robot {robot.id}\n"
-                status_text += f"Status: {robot.status}\n"
+                status_text += f"Status: {robot.get_status_text()}\n"
                 status_text += f"Position: {self.nav_graph.get_vertex_name(robot.current_vertex)}\n"
                 
                 if robot.destination_vertex is not None:
-                    status_text += f"Destination: {self.nav_graph.get_vertex_name(robot.destination_vertex)}"
+                    status_text += f"Destination: {self.nav_graph.get_vertex_name(robot.destination_vertex)}\n"
+                
+                # Add path info if available
+                if robot.path:
+                    # Show next few vertices in path
+                    path_preview = [str(v) for v in robot.path[:3]]
+                    if len(robot.path) > 3:
+                        path_preview.append("...")
+                    status_text += f"Next: {' → '.join(path_preview)}"
+                
+                # Add waiting info if robot is waiting
+                if robot.status == robot.STATUS_WAITING:
+                    blocking_info = robot.get_blocking_info(self.traffic_manager)
+                    if blocking_info:
+                        status_text += f"\nBlocked by: Robot {blocking_info.get('blocking_robot', '?')}"
                 
                 self.selection_info.config(text=status_text)
             else:
@@ -443,7 +461,7 @@ class FleetGUI:
             self.selection_info.config(text="None selected")
     
     def update_loop(self):
-        #Main update loop for simulation
+        """Main update loop for simulation"""
         update_interval = 1.0 / 30  # Target 30 FPS
         
         while self.running:
@@ -461,7 +479,7 @@ class FleetGUI:
             time.sleep(max(0, update_interval - (time.time() - current_time)))
     
     def on_canvas_click(self, event):
-        #Handle clicks on the canvas
+        """Handle clicks on the canvas"""
         canvas_x, canvas_y = event.x, event.y
         
         # Check if a robot was clicked
@@ -484,6 +502,9 @@ class FleetGUI:
         # Check if a vertex was clicked
         for vertex_index in self.nav_graph.vertex_map:
             coords = self.nav_graph.get_vertex_coords(vertex_index)
+            if not coords:
+                continue
+                
             vertex_canvas_x, vertex_canvas_y = self.world_to_canvas(*coords)
                 
             # Check if click is within vertex
@@ -496,31 +517,62 @@ class FleetGUI:
                 if self.selected_robot is not None:
                     robot = self.fleet_manager.robots.get(self.selected_robot)
                     if robot:
-                        success = self.fleet_manager.assign_task(self.selected_robot, vertex_index)
-                        if success:
-                            messagebox.showinfo("Task Assigned", 
-                                                f"Robot {self.selected_robot} assigned to navigate to {self.nav_graph.get_vertex_name(vertex_index)}")
+                        # Check if this is a charging station and robot needs charging
+                        if self.nav_graph.is_charger(vertex_index):
+                            if robot.status != robot.STATUS_CHARGING:
+                                success = self.fleet_manager.assign_task(self.selected_robot, vertex_index)
+                                if success:
+                                    messagebox.showinfo("Task Assigned", 
+                                                      f"Robot {self.selected_robot} assigned to navigate to charging station at {self.nav_graph.get_vertex_name(vertex_index)}")
+                                else:
+                                    messagebox.showwarning("Task Assignment Failed", 
+                                                         f"Could not assign Robot {self.selected_robot} to navigate to charging station at {self.nav_graph.get_vertex_name(vertex_index)}")
                         else:
-                            messagebox.showwarning("Task Assignment Failed", 
-                                                f"Could not assign Robot {self.selected_robot} to navigate to {self.nav_graph.get_vertex_name(vertex_index)}")
+                            # Regular navigation task
+                            success = self.fleet_manager.assign_task(self.selected_robot, vertex_index)
+                            if success:
+                                messagebox.showinfo("Task Assigned", 
+                                                  f"Robot {self.selected_robot} assigned to navigate to {self.nav_graph.get_vertex_name(vertex_index)}")
+                            else:
+                                messagebox.showwarning("Task Assignment Failed", 
+                                                     f"Could not assign Robot {self.selected_robot} to navigate to {self.nav_graph.get_vertex_name(vertex_index)}")
                         self.clear_selection()
                 else:
                     # Spawn a new robot
                     robot = self.fleet_manager.spawn_robot(vertex_index)
                     if robot:
                         messagebox.showinfo("Robot Spawned", 
-                                            f"Robot {robot.id} spawned at {self.nav_graph.get_vertex_name(vertex_index)}")
+                                          f"Robot {robot.id} spawned at {self.nav_graph.get_vertex_name(vertex_index)}")
                     
                 self.update_gui()
                 return
     
     def clear_selection(self):
-        #Clear the current selection
+        """Clear the current selection"""
         self.selected_robot = None
         self.update_gui()
     
+    def charge_selected_robot(self):
+        """Start charging the selected robot if at a charging station"""
+        if self.selected_robot is not None:
+            robot = self.fleet_manager.robots.get(self.selected_robot)
+            if robot:
+                if self.nav_graph.is_charger(robot.current_vertex):
+                    # Start charging
+                    if robot.status != robot.STATUS_CHARGING:
+                        robot.status = robot.STATUS_CHARGING
+                        robot.charging_start_time = None  # Will be set in update
+                        self.logger.info(f"Robot {robot.id} started charging")
+                        messagebox.showinfo("Charging Started", 
+                                          f"Robot {robot.id} charging at {self.nav_graph.get_vertex_name(robot.current_vertex)}")
+                else:
+                    messagebox.showwarning("Cannot Charge", 
+                                         f"Robot {robot.id} is not at a charging station")
+        else:
+            messagebox.showinfo("No Robot Selected", "Please select a robot first")
+    
     def stop(self):
-        #Stop the update loop
+        """Stop the update loop"""
         self.running = False
         if self.update_thread.is_alive():
             self.update_thread.join(timeout=1.0)

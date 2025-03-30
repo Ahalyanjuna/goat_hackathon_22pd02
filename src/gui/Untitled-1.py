@@ -1,4 +1,4 @@
-"""import tkinter as tk
+import tkinter as tk
 from tkinter import ttk, messagebox
 import math
 import time
@@ -180,13 +180,13 @@ class FleetGUI:
         canvas_x = world_x * self.scale_x + self.offset_x
         canvas_y = world_y * self.scale_y + self.offset_y
         return canvas_x, canvas_y
-        
+    
     def draw_nav_graph(self):
-        #Draw the navigation graph on the canvas
+        """Draw the navigation graph on the canvas"""
         # Clear canvas
         self.canvas.delete("all")
         
-        print("Drawing navigation graph...")
+        #print("Drawing navigation graph...")
         
         # Draw lanes
         for lane in self.nav_graph.lanes:
@@ -202,20 +202,47 @@ class FleetGUI:
             from_x, from_y = self.world_to_canvas(*from_coords)
             to_x, to_y = self.world_to_canvas(*to_coords)
             
-            print(f"Lane from ({from_x}, {from_y}) to ({to_x}, {to_y})")
-            
             # Check if lane is occupied
             lane_color = self.LANE_COLOR
+            lane_width = 2
+            
             if self.traffic_manager.is_lane_occupied(from_vertex, to_vertex):
+                # Occupied lane
                 lane_color = "#FF6666"  # Light red for occupied lanes
+                lane_width = 3  # Thicker lines for occupied lanes
+                
+                # Get the occupying robot's ID
+                robot_id = self.traffic_manager.get_occupying_robot(from_vertex, to_vertex)
                 
                 # Draw direction arrow
-                self.draw_arrow(from_x, from_y, to_x, to_y, lane_color)
+                self.draw_arrow(from_x, from_y, to_x, to_y, lane_color, lane_width)
+                
+                # Draw small label with robot ID
+                mid_x = (from_x + to_x) / 2
+                mid_y = (from_y + to_y) / 2
+                self.canvas.create_oval(mid_x-8, mid_y-8, mid_x+8, mid_y+8, fill="white")
+                self.canvas.create_text(mid_x, mid_y, text=str(robot_id), font=("Arial", 7, "bold"))
+                
+                # Check if there are robots waiting for this lane and visualize the queue
+                queue_length = self.traffic_manager.get_queue_length(from_vertex, to_vertex)
+                if queue_length > 0:
+                    # Draw a small indicator showing queue length
+                    offset_x = (to_y - from_y) * 0.1  # Perpendicular offset
+                    offset_y = -(to_x - from_x) * 0.1
+                    self.canvas.create_oval(
+                        mid_x + offset_x - 10, 
+                        mid_y + offset_y - 10, 
+                        mid_x + offset_x + 10, 
+                        mid_y + offset_y + 10, 
+                        fill="#FFA500"  # Orange for waiting
+                    )
+                    self.canvas.create_text(mid_x + offset_x, mid_y + offset_y, 
+                                        text=f"{queue_length}", font=("Arial", 7, "bold"))
             else:
-                # Draw normal lane
-                self.canvas.create_line(from_x, from_y, to_x, to_y, fill=lane_color, width=2)
+                # Free lane - normal line
+                self.canvas.create_line(from_x, from_y, to_x, to_y, fill=lane_color, width=lane_width)
         
-        # Draw vertices
+        # Draw vertices (rest of method unchanged)
         for vertex_index in self.nav_graph.vertex_map:
             coords = self.nav_graph.get_vertex_coords(vertex_index)
             if not coords:
@@ -247,9 +274,9 @@ class FleetGUI:
             vertex_name = self.nav_graph.get_vertex_name(vertex_index)
             if vertex_name:
                 self.canvas.create_text(canvas_x, canvas_y, text=vertex_name, font=("Arial", 8))
-    
-    def draw_arrow(self, from_x, from_y, to_x, to_y, color):
-        #Draw an arrow to indicate lane direction and occupancy
+
+    def draw_arrow(self, from_x, from_y, to_x, to_y, color, width=2):
+        """Draw an arrow to indicate lane direction and occupancy"""
         # Calculate direction vector
         dx = to_x - from_x
         dy = to_y - from_y
@@ -263,7 +290,7 @@ class FleetGUI:
         dy /= length
         
         # Draw the line
-        self.canvas.create_line(from_x, from_y, to_x, to_y, fill=color, width=2, arrow=tk.LAST)
+        self.canvas.create_line(from_x, from_y, to_x, to_y, fill=color, width=width, arrow=tk.LAST)
     
     def draw_robots(self):
         #Draw all robots on the canvas
@@ -412,4 +439,4 @@ class FleetGUI:
         #Stop the update loop
         self.running = False
         if self.update_thread.is_alive():
-            self.update_thread.join(timeout=1.0)"""
+            self.update_thread.join(timeout=1.0)

@@ -1,4 +1,4 @@
-import time
+"""import time
 import math
 import logging
 
@@ -34,11 +34,6 @@ class Robot:
         self.path_recalculation_attempts = 0
         self.max_recalculation_attempts = 3  # Limit recalculation attempts
         
-        # Waiting reason tracking
-        self.waiting_for_lane = False
-        self.waiting_for_vertex = False
-        
-        # Register the robot at its current vertex
         self.log(f"Robot {self.id} spawned at {self.nav_graph.get_vertex_name(self.current_vertex)}")
     
     def generate_color(self):
@@ -113,7 +108,7 @@ class Robot:
          
     
     def find_alternative_path(self, traffic_manager):
-        """Instead of finding an alternative path, just wait at current vertex until lane is free"""
+        #Instead of finding an alternative path, just wait at current vertex until lane is free
         # Mark the lane as blocked for tracking purposes
         if self.path:
             next_vertex = self.path[0]
@@ -142,42 +137,23 @@ class Robot:
         
         next_vertex = self.path[0]
         
-        # First check if the destination vertex is already occupied
-        if traffic_manager.is_vertex_occupied(next_vertex, self.id):
-            self.status = self.STATUS_WAITING
-            self.waiting_for_vertex = True
-            self.waiting_for_lane = False
-            occupying_robot = traffic_manager.get_vertex_occupying_robot(next_vertex)
-            self.log(f"Robot {self.id} waiting for vertex {self.nav_graph.get_vertex_name(next_vertex)} - occupied by Robot {occupying_robot}")
-            return False
-        
-        # Then request lane access
+        # Request lane access from traffic manager
         if traffic_manager.request_lane_access(self, self.current_vertex, next_vertex):
-            # Mark lane as occupied and begin movement
             self.current_lane = (self.current_vertex, next_vertex)
             self.status = self.STATUS_MOVING
             self.progress = 0.0
             self.movement_start_time = time.time()
-            self.waiting_for_lane = False
-            self.waiting_for_vertex = False
             self.log(f"Robot {self.id} moving from {self.nav_graph.get_vertex_name(self.current_vertex)} to {self.nav_graph.get_vertex_name(next_vertex)}")
             return True
         else:
-            # Either lane or vertex is blocked
+            # Lane is occupied, mark as waiting and store the blocking robot
             self.status = self.STATUS_WAITING
-            # Check specifically if it's the lane that's blocked
-            if traffic_manager.is_lane_occupied(self.current_vertex, next_vertex):
-                self.waiting_for_lane = True
-                self.waiting_for_vertex = False
-                occupying_robot = traffic_manager.get_occupying_robot(self.current_vertex, next_vertex)
-                self.log(f"Robot {self.id} waiting for lane access from {self.nav_graph.get_vertex_name(self.current_vertex)} to {self.nav_graph.get_vertex_name(next_vertex)} - blocked by Robot {occupying_robot}")
+            occupying_robot = traffic_manager.get_occupying_robot(self.current_vertex, next_vertex)
+            self.log(f"Robot {self.id} waiting for lane access from {self.nav_graph.get_vertex_name(self.current_vertex)} to {self.nav_graph.get_vertex_name(next_vertex)} - blocked by Robot {occupying_robot}")
             return False
         
     def update(self, traffic_manager, dt=None):
-        """Update robot state"""
-        # Register the robot's position with the traffic manager
-        traffic_manager.occupy_vertex(self.id, self.current_vertex)
-        
+        #Update robot state
         # Handle charging state
         if self.status == self.STATUS_CHARGING:
             # If this is a new charging session, record start time
@@ -211,38 +187,20 @@ class Robot:
         if self.status == self.STATUS_BLOCKED:
             return
         
-        # If waiting, periodically check if lane/vertex is now available
+        
+        # If waiting, periodically check if lane is now available
         if self.status == self.STATUS_WAITING and self.path:
             next_vertex = self.path[0]
-            
-            # Check if we're waiting for a vertex and if it's now free
-            if self.waiting_for_vertex and not traffic_manager.is_vertex_occupied(next_vertex, self.id):
-                self.waiting_for_vertex = False
-                self.movement_start_time = None  # Reset timer
-                self.log(f"Vertex {next_vertex} is now free. Attempting to move.")
-                self.start_move_to_next_vertex(traffic_manager)
-                return
-                
-            # Check if we're waiting for a lane and if it's now free
-            if self.waiting_for_lane and not traffic_manager.is_lane_occupied(self.current_vertex, next_vertex):
-                self.waiting_for_lane = False
+            if not traffic_manager.is_lane_occupied(self.current_vertex, next_vertex):
+                # Lane is now free, try to start moving
                 self.movement_start_time = None  # Reset timer
                 self.log(f"Lane from {self.current_vertex} to {next_vertex} is now free. Attempting to move.")
                 self.start_move_to_next_vertex(traffic_manager)
-                return
-                
-            # If we're waiting but haven't set a specific reason, check both
-            if not self.waiting_for_lane and not self.waiting_for_vertex:
-                if not traffic_manager.is_lane_occupied(self.current_vertex, next_vertex) and \
-                   not traffic_manager.is_vertex_occupied(next_vertex, self.id):
-                    self.movement_start_time = None  # Reset timer
-                    self.log(f"Path to {next_vertex} is now clear. Attempting to move.")
-                    self.start_move_to_next_vertex(traffic_manager)
-                else:
-                    # Initialize the waiting timer if not already set
-                    if self.movement_start_time is None:
-                        self.movement_start_time = time.time()
-                        self.log(f"Robot {self.id} waiting for path to {next_vertex} to become available")
+            else:
+                # Lane still blocked, just continue waiting
+                if self.movement_start_time is None:
+                    self.movement_start_time = time.time()
+                    self.log(f"Robot {self.id} waiting for lane {self.current_vertex}->{next_vertex} to become free")
             return
         
         # If idle with a path, try to start moving
@@ -266,21 +224,13 @@ class Robot:
             if self.progress >= 1.0:
                 # Update position
                 from_vertex, to_vertex = self.current_lane
-                
-                # Release the current vertex since we're leaving it
-                traffic_manager.release_vertex(self.current_vertex)
-                
                 # Release the lane and get the next robot to notify (if any)
                 success, next_robot_id = traffic_manager.release_lane(from_vertex, to_vertex)
                 
-                # Update our position
                 self.current_vertex = to_vertex
                 self.current_lane = None
                 self.path.pop(0)  # Remove the vertex we just reached
                 self.status = self.STATUS_IDLE
-                
-                # Register at the new vertex
-                traffic_manager.occupy_vertex(self.id, self.current_vertex)
                 
                 self.log(f"Robot {self.id} arrived at {self.nav_graph.get_vertex_name(self.current_vertex)}")
                 
@@ -288,7 +238,6 @@ class Robot:
                 if not self.path and self.current_vertex == self.destination_vertex:
                     self.status = self.STATUS_COMPLETED
                     self.log(f"Robot {self.id} completed navigation to {self.nav_graph.get_vertex_name(self.destination_vertex)}")
-    
     def get_current_position(self):
         #Get current coordinates based on progress along lane
         if self.status == self.STATUS_MOVING and self.current_lane:
@@ -307,35 +256,18 @@ class Robot:
         #Get info about what's blocking this robot
         if self.status == self.STATUS_WAITING and self.path:
             next_vertex = self.path[0]
-            
-            # Check if waiting for vertex
-            if traffic_manager.is_vertex_occupied(next_vertex, self.id):
-                blocking_robot_id = traffic_manager.get_vertex_occupying_robot(next_vertex)
-                if blocking_robot_id is not None:
-                    return {
-                        "blocked_vertex": next_vertex,
-                        "blocking_robot": blocking_robot_id
-                    }
-            
-            # Check if waiting for lane
-            if traffic_manager.is_lane_occupied(self.current_vertex, next_vertex):
-                blocking_robot_id = traffic_manager.get_occupying_robot(self.current_vertex, next_vertex)
-                if blocking_robot_id is not None:
-                    return {
-                        "blocked_lane": (self.current_vertex, next_vertex),
-                        "blocking_robot": blocking_robot_id
-                    }
+            blocking_robot_id = traffic_manager.get_occupying_robot(self.current_vertex, next_vertex)
+            if blocking_robot_id is not None:
+                return {
+                    "blocked_lane": (self.current_vertex, next_vertex),
+                    "blocking_robot": blocking_robot_id
+                }
         return None
     
     def get_status_text(self):
         #Get detailed status text for UI display
         if self.status == self.STATUS_WAITING:
-            if self.waiting_for_vertex:
-                return "Waiting - Vertex Occupied"
-            elif self.waiting_for_lane:
-                return "Waiting - Lane Blocked"
-            else:
-                return "Waiting - Path Blocked"
+            return "Waiting - Path Blocked"
         elif self.status == self.STATUS_BLOCKED:
             return "Blocked - No Alternative"
         elif self.status == self.STATUS_IDLE:
@@ -350,5 +282,4 @@ class Robot:
     
     def log(self, message):
         #Log robot action
-        if self.logger:
-            return
+        if self.logger:"""
