@@ -22,3 +22,6 @@ How to use the GUI ?
 * Click on a robot and then click on the destination vertex to assign its destination.
 * If vertex is a charging station, clicking on 'charge robot' allows the robot to get charged.
 * The number of robots in different states can be kept track of using the side panel. 
+
+DEMO VIDEO
+https://github.com/Ahalyanjuna/goat_hackathon_22pd02/blob/main/Goat%20Hackathon.mp4
