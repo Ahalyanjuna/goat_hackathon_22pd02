@@ -1,0 +1,66 @@
+2025-03-30 09:24:43,141 - fleet_management - INFO - Logging initialized
+2025-03-30 09:24:43,141 - fleet_management - INFO - Fleet Management System starting up
+2025-03-30 09:24:43,141 - fleet_management - INFO - Loading navigation graph from D:\full stack\goat\data\nav_graph_2.json
+2025-03-30 09:24:43,141 - fleet_management - INFO - Loaded 14 vertices and 30 lanes
+2025-03-30 09:24:43,890 - fleet_management - INFO - Starting GUI
+2025-03-30 09:24:45,618 - fleet_management - INFO - Robot 0 spawned at V1
+2025-03-30 09:24:45,620 - fleet_management - INFO - Spawned Robot 0 at vertex 1 (V1)
+2025-03-30 09:24:47,756 - fleet_management - INFO - Robot 1 spawned at V11
+2025-03-30 09:24:47,756 - fleet_management - INFO - Spawned Robot 1 at vertex 11 (V11)
+2025-03-30 09:24:50,012 - fleet_management - INFO - Selected Robot 1
+2025-03-30 09:24:51,238 - fleet_management - INFO - Robot 1 assigned to navigate to V4
+2025-03-30 09:24:51,238 - fleet_management - INFO - Robot 1 calculating path from 11 to 4
+2025-03-30 09:24:51,238 - fleet_management - INFO - Avoiding lanes: set()
+2025-03-30 09:24:51,238 - fleet_management - INFO - Path found: [10, 9, 8, 1, 2, 3, 4]
+2025-03-30 09:24:51,238 - fleet_management - INFO - Assigned Robot 1 to navigate to vertex 4 (V4)
+2025-03-30 09:24:51,238 - fleet_management - INFO - Path calculated: [10, 9, 8, 1, 2, 3, 4]
+2025-03-30 09:24:51,269 - fleet_management - INFO - Lane from 11 to 10 reserved by Robot 1
+2025-03-30 09:24:51,290 - fleet_management - INFO - Robot 1 moving from V11 to V10
+2025-03-30 09:24:53,290 - fleet_management - INFO - Lane from 11 to 10 released by Robot 1
+2025-03-30 09:24:53,290 - fleet_management - INFO - Robot 1 arrived at V10
+2025-03-30 09:24:53,324 - fleet_management - INFO - Lane from 10 to 9 reserved by Robot 1
+2025-03-30 09:24:53,324 - fleet_management - INFO - Robot 1 moving from V10 to m2
+2025-03-30 09:24:54,382 - fleet_management - INFO - Selected Robot 0
+2025-03-30 09:24:55,340 - fleet_management - INFO - Lane from 10 to 9 released by Robot 1
+2025-03-30 09:24:55,341 - fleet_management - INFO - Robot 1 arrived at m2
+2025-03-30 09:24:55,374 - fleet_management - INFO - Lane from 9 to 8 reserved by Robot 1
+2025-03-30 09:24:55,374 - fleet_management - INFO - Robot 1 moving from m2 to V8
+2025-03-30 09:24:57,398 - fleet_management - INFO - Lane from 9 to 8 released by Robot 1
+2025-03-30 09:24:57,398 - fleet_management - INFO - Robot 1 arrived at V8
+2025-03-30 09:24:57,433 - fleet_management - INFO - Lane from 8 to 1 reserved by Robot 1
+2025-03-30 09:24:57,433 - fleet_management - INFO - Robot 1 moving from V8 to V1
+2025-03-30 09:24:57,997 - fleet_management - INFO - Robot 0 assigned to navigate to V3
+2025-03-30 09:24:57,997 - fleet_management - INFO - Robot 0 calculating path from 1 to 3
+2025-03-30 09:24:57,997 - fleet_management - INFO - Avoiding lanes: set()
+2025-03-30 09:24:57,997 - fleet_management - INFO - Path found: [2, 3]
+2025-03-30 09:24:57,997 - fleet_management - INFO - Assigned Robot 0 to navigate to vertex 3 (V3)
+2025-03-30 09:24:57,997 - fleet_management - INFO - Path calculated: [2, 3]
+2025-03-30 09:24:58,028 - fleet_management - INFO - Lane from 1 to 2 reserved by Robot 0
+2025-03-30 09:24:58,050 - fleet_management - INFO - Robot 0 moving from V1 to V2
+2025-03-30 09:24:59,440 - fleet_management - INFO - Lane from 8 to 1 released by Robot 1
+2025-03-30 09:24:59,440 - fleet_management - INFO - Robot 1 arrived at V1
+2025-03-30 09:24:59,475 - fleet_management - INFO - Lane from 1 to 2 is occupied by Robot 0. Robot 1 queued.
+2025-03-30 09:24:59,476 - fleet_management - INFO - Robot 1 waiting for lane access from V1 to V2 - blocked by Robot 0
+2025-03-30 09:25:00,036 - fleet_management - INFO - Lane from 1 to 2 released by Robot 0
+2025-03-30 09:25:00,036 - fleet_management - INFO - Notifying Robot 1 that lane from 1 to 2 is now available
+2025-03-30 09:25:00,038 - fleet_management - INFO - Robot 0 arrived at V2
+2025-03-30 09:25:00,038 - fleet_management - INFO - Lane from 1 to 2 is now free. Attempting to move.
+2025-03-30 09:25:00,038 - fleet_management - INFO - Lane from 1 to 2 reserved by Robot 1
+2025-03-30 09:25:00,038 - fleet_management - INFO - Robot 1 moving from V1 to V2
+2025-03-30 09:25:00,071 - fleet_management - INFO - Lane from 2 to 3 reserved by Robot 0
+2025-03-30 09:25:00,071 - fleet_management - INFO - Robot 0 moving from V2 to V3
+2025-03-30 09:25:02,048 - fleet_management - INFO - Lane from 1 to 2 released by Robot 1
+2025-03-30 09:25:02,050 - fleet_management - INFO - Robot 1 arrived at V2
+2025-03-30 09:25:02,098 - fleet_management - INFO - Lane from 2 to 3 released by Robot 0
+2025-03-30 09:25:02,106 - fleet_management - INFO - Robot 0 arrived at V3
+2025-03-30 09:25:02,108 - fleet_management - INFO - Robot 0 completed navigation to V3
+2025-03-30 09:25:02,108 - fleet_management - INFO - Lane from 2 to 3 reserved by Robot 1
+2025-03-30 09:25:02,108 - fleet_management - INFO - Robot 1 moving from V2 to V3
+2025-03-30 09:25:04,118 - fleet_management - INFO - Lane from 2 to 3 released by Robot 1
+2025-03-30 09:25:04,118 - fleet_management - INFO - Robot 1 arrived at V3
+2025-03-30 09:25:04,157 - fleet_management - INFO - Lane from 3 to 4 reserved by Robot 1
+2025-03-30 09:25:04,186 - fleet_management - INFO - Robot 1 moving from V3 to V4
+2025-03-30 09:25:06,163 - fleet_management - INFO - Lane from 3 to 4 released by Robot 1
+2025-03-30 09:25:06,163 - fleet_management - INFO - Robot 1 arrived at V4
+2025-03-30 09:25:06,163 - fleet_management - INFO - Robot 1 completed navigation to V4
+2025-03-30 09:25:11,431 - fleet_management - INFO - Shutting down Fleet Management System

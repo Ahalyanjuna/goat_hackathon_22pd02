@@ -105,35 +105,7 @@ class Robot:
         # No path found
         self.log(f"No path found from {self.current_vertex} to {self.destination_vertex} (avoiding {len(avoid_lanes)} lanes)")
         self.path = []
-      
-    
-    """def find_alternative_path(self, traffic_manager):
-        #Try to find an alternative path by avoiding blocked lanes
-        current_blocked_lane = None
-        if self.path:
-            next_vertex = self.path[0]
-            current_blocked_lane = (self.current_vertex, next_vertex)
-            
-        if current_blocked_lane:
-            self.blocked_lanes.add(current_blocked_lane)
-            
-        self.path_recalculation_attempts += 1
-        
-        if self.path_recalculation_attempts <= self.max_recalculation_attempts:
-            self.log(f"Robot {self.id} attempting to find alternative path (attempt {self.path_recalculation_attempts})")
-            self.calculate_path()
-            
-            if self.path:
-                self.log(f"Robot {self.id} found alternative path: {self.path}")
-                return True
-        
-        # If we've exceeded max attempts or no alternative path exists
-        if not self.path:
-            self.status = self.STATUS_BLOCKED
-            self.log(f"Robot {self.id} is blocked - no alternative path available")
-            return False
-        
-        return len(self.path) > 0"""
+         
     
     def find_alternative_path(self, traffic_manager):
         """Instead of finding an alternative path, just wait at current vertex until lane is free"""
@@ -180,99 +152,6 @@ class Robot:
             self.log(f"Robot {self.id} waiting for lane access from {self.nav_graph.get_vertex_name(self.current_vertex)} to {self.nav_graph.get_vertex_name(next_vertex)} - blocked by Robot {occupying_robot}")
             return False
         
-   
-
-    """def update(self, traffic_manager, dt=None):
-        #Update robot state
-        # Handle charging state
-        if self.status == self.STATUS_CHARGING:
-            # If this is a new charging session, record start time
-            if self.charging_start_time is None:
-                self.charging_start_time = time.time()
-                self.charging_progress = 0.0
-                self.log(f"Robot {self.id} started charging at {self.nav_graph.get_vertex_name(self.current_vertex)}")
-            
-            # Update charging progress
-            if dt is None:
-                # Calculate time-based progress
-                current_time = time.time()
-                elapsed = current_time - self.charging_start_time
-                self.charging_progress = min(1.0, elapsed / self.charging_total_time)
-            else:
-                # Use provided dt (for fixed time step)
-                self.charging_progress += dt / self.charging_total_time
-                self.charging_progress = min(1.0, self.charging_progress)
-
-            # If charging is complete, change to idle status
-            if self.charging_progress >= 1.0:
-                self.status = self.STATUS_IDLE
-                self.charging_start_time = None
-                self.charging_progress = 0.0
-                self.log(f"Robot {self.id} finished charging at {self.nav_graph.get_vertex_name(self.current_vertex)}")
-            
-            # If the robot has a path (assigned during charging), don't exit yet, wait until charging is done
-            return
-        
-        # If at charger, charge
-        if self.status == self.STATUS_IDLE and self.nav_graph.is_charger(self.current_vertex):
-            self.status = self.STATUS_CHARGING
-            self.log(f"Robot {self.id} charging at {self.nav_graph.get_vertex_name(self.current_vertex)}")
-            return
-        
-        # If blocked, stay blocked until user intervention
-        if self.status == self.STATUS_BLOCKED:
-            return
-        
-        # If waiting, periodically try to find alternative paths
-        if self.status == self.STATUS_WAITING and self.path:
-            # Check if the lane is still blocked
-            next_vertex = self.path[0]
-            if traffic_manager.is_lane_occupied(self.current_vertex, next_vertex):
-                # Lane still blocked, try to find alternative path after waiting for a bit
-                if self.movement_start_time is None:
-                    self.movement_start_time = time.time()
-                elif time.time() - self.movement_start_time > 3.0:  # Wait 3 seconds before trying alternatives
-                    self.movement_start_time = None
-                    self.find_alternative_path(traffic_manager)
-            else:
-                # Lane no longer blocked, try moving
-                self.start_move_to_next_vertex(traffic_manager)
-            return
-        
-        # If idle with a path, try to start moving
-        if self.status == self.STATUS_IDLE and self.path:
-            self.start_move_to_next_vertex(traffic_manager)
-            return
-        
-        # If moving, update progress
-        if self.status == self.STATUS_MOVING:
-            if dt is None:
-                # Calculate time-based progress
-                current_time = time.time()
-                elapsed = current_time - self.movement_start_time
-                self.progress = min(1.0, elapsed / self.movement_total_time)
-            else:
-                # Use provided dt (for fixed time step)
-                self.progress += dt / self.movement_total_time
-                self.progress = min(1.0, self.progress)
-            
-            # Check if movement is complete
-            if self.progress >= 1.0:
-                # Update position
-                from_vertex, to_vertex = self.current_lane
-                traffic_manager.release_lane(from_vertex, to_vertex)
-                self.current_vertex = to_vertex
-                self.current_lane = None
-                self.path.pop(0)  # Remove the vertex we just reached
-                self.status = self.STATUS_IDLE
-                
-                self.log(f"Robot {self.id} arrived at {self.nav_graph.get_vertex_name(self.current_vertex)}")
-                
-                # If at destination, mark as complete
-                if not self.path and self.current_vertex == self.destination_vertex:
-                    self.status = self.STATUS_COMPLETED
-                    self.log(f"Robot {self.id} completed navigation to {self.nav_graph.get_vertex_name(self.destination_vertex)}")
-        """
     def update(self, traffic_manager, dt=None):
         """Update robot state"""
         # Handle charging state
@@ -308,22 +187,6 @@ class Robot:
         if self.status == self.STATUS_BLOCKED:
             return
         
-        # If waiting, check if lane is now available before seeking alternatives
-        """if self.status == self.STATUS_WAITING and self.path:
-            next_vertex = self.path[0]
-            if not traffic_manager.is_lane_occupied(self.current_vertex, next_vertex):
-                # Lane is now free, try to start moving
-                self.movement_start_time = None  # Reset timer
-                self.log(f"Lane from {self.current_vertex} to {next_vertex} is now free. Attempting to move.")
-                self.start_move_to_next_vertex(traffic_manager)
-            else:
-                # Lane still blocked, consider alternatives after waiting
-                if self.movement_start_time is None:
-                    self.movement_start_time = time.time()
-                elif time.time() - self.movement_start_time > 3.0:  # Wait 3 seconds before trying alternatives
-                    self.movement_start_time = None
-                    self.find_alternative_path(traffic_manager)
-            return"""
         
         # If waiting, periodically check if lane is now available
         if self.status == self.STATUS_WAITING and self.path:
